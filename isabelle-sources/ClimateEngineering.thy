@@ -160,7 +160,7 @@ subsubsection\<open>Does A50 attack both A48 and A49?\<close>
 noting that here, too, is an additional implicit premise needed.*)
 
 lemma "attacks1 A50_C A48_C" nitpick oops (** countermodel found*)
-lemma "attacks1 A50_C A49_C" nitpick oops (** countermodel found*)
+lemma "attacks1 A50_C A49_P2" nitpick oops (** countermodel found*)
 
 theorem assumes "[\<turnstile> \<^bold>\<not>WrongAction(Mitigation)]" (** implicit premise*)
   shows "attacks1 A50_C A48_C"
