@@ -19,7 +19,7 @@ and make for an argument cluster with a non-trivial dialectical structure which 
 reconstructing in this section. We focus on six arguments from the ethics of risk,
 which entail that the deployment of CE technologies (today as in the future) is not desirable
 because of being morally wrong (argument A22). Supporting arguments of A22 are: A45, A46, A47, A48, A49.
-In particular, two of these arguments, namely A47 and A49, are further attacked by A50 and A51.
+In particular, two of these arguments, namely A48 and A49, are further attacked by A50 and A51.
 *)
 
 subsubsection\<open>Ethics of Risk Argument (A22)\<close>
@@ -155,24 +155,26 @@ lemma "supports1 A49_C A22_P1" nitpick oops (**countermodel found*)
 theorem assumes "[\<turnstile> \<^bold>\<forall>I. CEAction(I) \<^bold>\<rightarrow> WrongAction(I)] \<longrightarrow> [\<turnstile> CEisWrong]"
   shows "supports1 A49_C A22_P1" using A22_P1_def A49_C_def assms(1) by blast
 
-subsubsection\<open>Does A50 attack both A47 and A49?\<close>
-(**Here, too, are two additional implicit premises needed.*)
-lemma "attacks1 A50_C A47_C" nitpick oops (** countermodel found*)
+subsubsection\<open>Does A50 attack both A48 and A49?\<close>
+(**We reconstruct the arguments corresponding to the \emph{attack} relations,
+noting that here, too, is an additional implicit premise needed.*)
+
+lemma "attacks1 A50_C A48_C" nitpick oops (** countermodel found*)
 lemma "attacks1 A50_C A49_C" nitpick oops (** countermodel found*)
 
-theorem assumes "[\<turnstile> \<^bold>\<forall>I. CEAction(I) \<^bold>\<or> (I \<^bold>\<approx> Mitigation)]" (**first implicit premise*)
-  and "[\<turnstile> \<^bold>\<exists>I. \<^bold>\<not>WrongAction(I)]" (**second implicit premise*)
-  shows "attacks2 A48_C A50_C A47_C"
-  using A47_C_def A48_C_def A50_C_def assms(1) assms(2) by fastforce
-theorem assumes "[\<turnstile> \<^bold>\<forall>I. CEAction(I) \<^bold>\<or> (I \<^bold>\<approx> Mitigation)]" (**first implicit premise*)
-  and "[\<turnstile> \<^bold>\<exists>I. \<^bold>\<not>WrongAction(I)]" (**second implicit premise*)
-  shows "attacks2 A50_C A49_P1 A49_P2"
-  using A49_P1_def A49_P2_def A50_C_def assms(1) assms(2) by fastforce
+theorem assumes "[\<turnstile> \<^bold>\<not>WrongAction(Mitigation)]" (** implicit premise*)
+  shows "attacks1 A50_C A48_C"
+  using A48_C_def A50_C_def assms(1) by blast
+
+theorem assumes "[\<turnstile> \<^bold>\<not>WrongAction(Mitigation)]" (** implicit premise*)
+  shows "attacks1 A50_C A49_P2"                
+  using A49_P2_def A50_C_def assms(1) by blast
 
 subsubsection\<open>Does A51 attack A49?\<close>
 (**The same implicit premise as before is needed.*)
 lemma "attacks2 A51_C A49_P1 A49_P2" nitpick oops (** countermodel found*)
-theorem assumes "[\<turnstile> \<^bold>\<exists>I. \<^bold>\<not>WrongAction(I)]" (**implicit premise *)
+
+theorem assumes "[\<turnstile> \<^bold>\<not>WrongAction(Mitigation)]" (**implicit premise *)
   shows "attacks1 A51_C A49_P2" using A49_P2_def A51_C_def assms(1) by blast
 
 (*<*)
