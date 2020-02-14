@@ -28,11 +28,10 @@ subsubsection\<open>Ethics of Risk Argument (A22)\<close>
 i.e. true in all possible worlds or situations. We are thus presupossing a possible-worlds semantics.*)
 
 consts CEisWrong::"w\<Rightarrow>bool"  (**notice type for world-contingent propositions*)
-consts CEisNotDesirable::"w\<Rightarrow>bool"
-
-definition "A22_P1 \<equiv> [\<turnstile> CEisWrong]" (*(aka. T9) CE is wrong in all situations*)
-definition "A22_P2 \<equiv> [\<turnstile> CEisWrong \<^bold>\<rightarrow> CEisNotDesirable]" (*implicit!*)
-definition "A22_C  \<equiv> [\<turnstile> CEisNotDesirable]" (*...also in all situations*)
+       CEisNotDesirable::"w\<Rightarrow>bool"
+definition A22_P1::bool where "A22_P1 \<equiv> [\<turnstile> CEisWrong]" (*(aka. T9) CE is wrong in all situations*)
+definition A22_P2::bool where "A22_P2 \<equiv> [\<turnstile> CEisWrong \<^bold>\<rightarrow> CEisNotDesirable]" (*implicit!*)
+definition A22_C::bool where "A22_C \<equiv> [\<turnstile> CEisNotDesirable]" (*...also in all situations*)
 
 (**We use Nitpick to find a model satisfying the premises and the conclusion of the formalised argument.*)
 lemma assumes A22_P1 and A22_P2 and A22_C shows True 
@@ -46,11 +45,10 @@ subsubsection\<open>Termination Problem (A45)\<close>
 catastrophic climate change ensues.
 *)
 consts CEisTerminated::"w\<Rightarrow>bool"   (**world-contingent propositional constants*)
-consts CEisCatastrophic::"w\<Rightarrow>bool"
-
-definition "A45_P1 \<equiv> [\<turnstile> \<^bold>\<diamond>CEisTerminated]"
-definition "A45_P2 \<equiv> [\<turnstile> CEisTerminated \<^bold>\<rightarrow> CEisCatastrophic]"
-definition "A45_C  \<equiv> [\<turnstile> \<^bold>\<diamond>CEisCatastrophic]"
+       CEisCatastrophic::"w\<Rightarrow>bool"
+definition A45_P1::bool where "A45_P1 \<equiv> [\<turnstile> \<^bold>\<diamond>CEisTerminated]"
+definition A45_P2::bool where "A45_P2 \<equiv> [\<turnstile> CEisTerminated \<^bold>\<rightarrow> CEisCatastrophic]"
+definition A45_C::bool  where  "A45_C \<equiv> [\<turnstile> \<^bold>\<diamond>CEisCatastrophic]"
 
 (**Notice that we have introduced in the above formalisation the @{text "\<diamond>"}
 modal operator to signify that a proposition is possibly true (e.g. at a future point in time).*)
@@ -64,9 +62,9 @@ Notice that we can make best sense of this objection as (implicitly?) presupossi
 CE-caused catastrophes.*)
 
 consts RiskControlAbility::"w\<Rightarrow>bool"
-definition "A46_P1 \<equiv> [\<turnstile> \<^bold>\<diamond>\<^bold>\<not>RiskControlAbility]"
-definition "A46_P2 \<equiv> [\<turnstile> \<^bold>\<not>RiskControlAbility \<^bold>\<rightarrow> \<^bold>\<diamond>CEisCatastrophic]"
-definition "A46_C  \<equiv> [\<turnstile> \<^bold>\<diamond>CEisCatastrophic]"
+definition A46_P1::bool where "A46_P1 \<equiv> [\<turnstile> \<^bold>\<diamond>\<^bold>\<not>RiskControlAbility]"
+definition A46_P2::bool where "A46_P2 \<equiv> [\<turnstile> \<^bold>\<not>RiskControlAbility \<^bold>\<rightarrow> \<^bold>\<diamond>CEisCatastrophic]"
+definition A46_C::bool where   "A46_C \<equiv> [\<turnstile> \<^bold>\<diamond>CEisCatastrophic]"
 
 (**The argument A46 needs a modal logic "K4" to succeed.
 The implicit premise thus being:  @{text "Ax4: [\<turnstile> \<forall>\<phi>. \<box>\<box>\<phi> \<rightarrow> \<box>\<phi>]"}. *)
@@ -84,26 +82,24 @@ thus introduce a type ("e") for actions (interventions).*)
 
 typedecl e (**introduces a new type for actions*)
 consts CEAction::"e\<Rightarrow>w\<Rightarrow>bool" (**notice type for (world-dependent) predicates*)
-consts Irreversible::"e\<Rightarrow>w\<Rightarrow>bool"
-
-definition "A47_C \<equiv> [\<turnstile> \<^bold>\<forall>I. CEAction(I) \<^bold>\<rightarrow> Irreversible(I)]"
+       Irreversible::"e\<Rightarrow>w\<Rightarrow>bool" 
+definition A47_C::bool where "A47_C \<equiv> [\<turnstile> \<^bold>\<forall>I. CEAction(I) \<^bold>\<rightarrow> Irreversible(I)]"
 
 subsubsection\<open>No Ability to Retain Options after Irreversible Interventions (A48)\<close>
 (**Irreversible interventions (of any kind) narrow the options of future generations in an unacceptable way,
 i.e., it is wrong to carry them out.*)
 
 consts WrongAction::"e\<Rightarrow>w\<Rightarrow>bool"
-definition "A48_C \<equiv> [\<turnstile> \<^bold>\<forall>I. Irreversible(I) \<^bold>\<rightarrow> WrongAction(I)]"
+definition A48_C::bool where "A48_C \<equiv> [\<turnstile> \<^bold>\<forall>I. Irreversible(I) \<^bold>\<rightarrow> WrongAction(I)]"
 
 subsubsection\<open>Unpredictable Side-Effects are Wrong (A49)\<close>
 (**As long as side-effects of CE technologies cannot be reliably predicted,
 their deployment is morally wrong.*)
 
 consts USideEffects::"e\<Rightarrow>w\<Rightarrow>bool"
-
-definition "A49_P1 \<equiv> [\<turnstile>\<^bold>\<forall>I. CEAction(I) \<^bold>\<rightarrow> USideEffects(I)]"
-definition "A49_P2 \<equiv> [\<turnstile>\<^bold>\<forall>I. USideEffects(I) \<^bold>\<rightarrow> WrongAction(I)]"
-definition "A49_C  \<equiv> [\<turnstile>\<^bold>\<forall>I. CEAction(I) \<^bold>\<rightarrow> WrongAction(I)]"
+definition A49_P1::bool where "A49_P1 \<equiv> [\<turnstile>\<^bold>\<forall>I. CEAction(I) \<^bold>\<rightarrow> USideEffects(I)]"
+definition A49_P2::bool where "A49_P2 \<equiv> [\<turnstile>\<^bold>\<forall>I. USideEffects(I) \<^bold>\<rightarrow> WrongAction(I)]"
+definition A49_C ::bool where "A49_C  \<equiv> [\<turnstile>\<^bold>\<forall>I. CEAction(I) \<^bold>\<rightarrow> WrongAction(I)]"
 
 theorem A49_valid: assumes A49_P1 and A49_P2 shows A49_C (*blast verifies validity*)
   using A49_C_def A49_P1_def A49_P2_def assms(1) assms(2) by blast
@@ -113,22 +109,22 @@ subsubsection\<open>Mitigation is also Irreversible (A50)\<close>
 extent, an irreversible intervention with unforeseen side-effects.*)
 
 consts Mitigation::e (**constant of same type as actions/interventions*)
-
-definition "A50_C \<equiv> [\<turnstile> Irreversible(Mitigation) \<^bold>\<and> USideEffects(Mitigation)]"
+definition A50_C::bool where 
+  "A50_C \<equiv> [\<turnstile> Irreversible(Mitigation) \<^bold>\<and> USideEffects(Mitigation)]"
 
 subsubsection\<open>All Interventions have Unpredictable Side-Effects (A51)\<close>
 (**This defense of CE states that we do never completely foresee the consequences of our actions anyways,
 and thus aims at somehow trivializing the concerns regarding unforeseen side-effects of CE.*)
 
-definition "A51_C \<equiv> [\<turnstile> \<^bold>\<forall>I. USideEffects(I)]"
+definition A51_C where "A51_C \<equiv> [\<turnstile> \<^bold>\<forall>I. USideEffects(I)]"
 
 subsection\<open>Reconstructing the Argument Graph\<close>
 (**Below we introduce our generalized attack/support relations between arguments.*)
 
-abbreviation "attacks1 \<phi> \<psi>    \<equiv> (\<phi> \<and> \<psi>) \<longrightarrow> False" (**one attacker*)
-abbreviation "supports1 \<phi> \<psi>   \<equiv> \<phi> \<longrightarrow> \<psi>" (**only one supporter*)
-abbreviation "attacks2 \<gamma> \<phi> \<psi>  \<equiv> (\<gamma> \<and> \<phi> \<and> \<psi>) \<longrightarrow> False" (*two attackers *)
-abbreviation "supports2 \<gamma> \<phi> \<psi> \<equiv> (\<gamma> \<and> \<phi>) \<longrightarrow> \<psi>" (**two supporters*)
+abbreviation attacks1 where  "attacks1 \<phi> \<psi>  \<equiv> (\<phi> \<and> \<psi>) \<longrightarrow> False" (**one attacker*)
+abbreviation supports1 where "supports1 \<phi> \<psi> \<equiv> \<phi> \<longrightarrow> \<psi>" (**only one supporter*)
+abbreviation attacks2 where  "attacks2 \<gamma> \<phi> \<psi>  \<equiv> (\<gamma> \<and> \<phi> \<and> \<psi>) \<longrightarrow> False" (*two attackers *)
+abbreviation supports2 where "supports2 \<gamma> \<phi> \<psi> \<equiv> (\<gamma> \<and> \<phi>) \<longrightarrow> \<psi>" (**two supporters*)
 
 subsubsection\<open>Does A45 support A22?\<close>
 (**Implicit premise needed.*)
