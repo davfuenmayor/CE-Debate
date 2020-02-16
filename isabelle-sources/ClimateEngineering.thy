@@ -23,15 +23,15 @@ In particular, two of these arguments, namely A48 and A49, are further attacked 
 *)
 
 subsubsection\<open>Ethics of Risk Argument (A22)\<close>
-(**The argument has as premise T9: "CE deployment is morally wrong" and as conclusion:
+(**The argument has as premise: "CE deployment is morally wrong" and as conclusion:
 "CE deployment is not desirable". Notice that both are formalised as (modally) valid propositions,
 i.e. true in all possible worlds or situations. We are thus presupossing a possible-worlds semantics.*)
 
 consts CEisWrong::"w\<Rightarrow>bool"  (**notice type for world-contingent propositions*)
 consts CEisNotDesirable::"w\<Rightarrow>bool"
 
-definition "A22_P1 \<equiv> [\<turnstile> CEisWrong]" (*(aka. T9) CE is wrong in all situations*)
-definition "A22_P2 \<equiv> [\<turnstile> CEisWrong \<^bold>\<rightarrow> CEisNotDesirable]" (*implicit!*)
+definition "A22_P1 \<equiv> [\<turnstile> CEisWrong]" (*CE is wrong (in all situations)*)
+definition "A22_P2 \<equiv> [\<turnstile> CEisWrong \<^bold>\<rightarrow> CEisNotDesirable]" (*implicit premise*)
 definition "A22_C  \<equiv> [\<turnstile> CEisNotDesirable]" (*...also in all situations*)
 
 (**We use Nitpick to find a model satisfying the premises and the conclusion of the formalised argument.*)
@@ -48,7 +48,7 @@ catastrophic climate change ensues.
 consts CEisTerminated::"w\<Rightarrow>bool"   (**world-contingent propositional constants*)
 consts CEisCatastrophic::"w\<Rightarrow>bool"
 
-definition "A45_P1 \<equiv> [\<turnstile> \<^bold>\<diamond>CEisTerminated]"
+definition "A45_P1 \<equiv> [\<turnstile> \<^bold>\<diamond>CEisTerminated]" (*implicit premise*)
 definition "A45_P2 \<equiv> [\<turnstile> CEisTerminated \<^bold>\<rightarrow> CEisCatastrophic]"
 definition "A45_C  \<equiv> [\<turnstile> \<^bold>\<diamond>CEisCatastrophic]"
 
@@ -65,7 +65,7 @@ CE-caused catastrophes.*)
 
 consts RiskControlAbility::"w\<Rightarrow>bool"
 definition "A46_P1 \<equiv> [\<turnstile> \<^bold>\<diamond>\<^bold>\<not>RiskControlAbility]"
-definition "A46_P2 \<equiv> [\<turnstile> \<^bold>\<not>RiskControlAbility \<^bold>\<rightarrow> \<^bold>\<diamond>CEisCatastrophic]"
+definition "A46_P2 \<equiv> [\<turnstile> \<^bold>\<not>RiskControlAbility \<^bold>\<rightarrow> \<^bold>\<diamond>CEisCatastrophic]" (*implicit premise*)
 definition "A46_C  \<equiv> [\<turnstile> \<^bold>\<diamond>CEisCatastrophic]"
 
 (**The argument A46 needs a modal logic "K4" to succeed.
@@ -102,14 +102,14 @@ their deployment is morally wrong.*)
 consts USideEffects::"e\<Rightarrow>w\<Rightarrow>bool"
 
 definition "A49_P1 \<equiv> [\<turnstile>\<^bold>\<forall>I. CEAction(I) \<^bold>\<rightarrow> USideEffects(I)]"
-definition "A49_P2 \<equiv> [\<turnstile>\<^bold>\<forall>I. USideEffects(I) \<^bold>\<rightarrow> WrongAction(I)]"
+definition "A49_P2 \<equiv> [\<turnstile>\<^bold>\<forall>I. USideEffects(I) \<^bold>\<rightarrow> WrongAction(I)]" (*implicit premise*)
 definition "A49_C  \<equiv> [\<turnstile>\<^bold>\<forall>I. CEAction(I) \<^bold>\<rightarrow> WrongAction(I)]"
 
 theorem A49_valid: assumes A49_P1 and A49_P2 shows A49_C (*blast verifies validity*)
   using A49_C_def A49_P1_def A49_P2_def assms(1) assms(2) by blast
 
 subsubsection\<open>Mitigation is also Irreversible (A50)\<close>
-(**Mitigation of climate change (i.e., the "prevention" alternative to CE), too, is, at least to some
+(**Mitigation of climate change (i.e., the "preventive alternative" to CE), too, is, at least to some
 extent, an irreversible intervention with unforeseen side-effects.*)
 
 consts Mitigation::e (**constant of same type as actions/interventions*)
@@ -143,16 +143,16 @@ theorem assumes "[\<turnstile> \<^bold>\<diamond>CEisCatastrophic \<^bold>\<righ
   shows "supports1 A46_C A22_P1" using A22_P1_def A46_C_def assms(1) by blast
 
 subsubsection\<open>Do A47 and A48 (together) support A22?\<close>
-(**Implicit premise again needed.*)
+(**An implicit premise is also needed.*)
 lemma "supports2 A47_C A48_C A22_P1" nitpick oops (**countermodel found*)
 theorem assumes "[\<turnstile>\<^bold>\<forall>I. CEAction(I) \<^bold>\<rightarrow> WrongAction(I)]\<longrightarrow>[\<turnstile> CEisWrong]" (*implicit*)
   shows "supports2 A47_C A48_C A22_P1"
   using A22_P1_def A47_C_def A48_C_def assms(1) by blast (**assms(1) implicit*)
 
 subsubsection\<open>Does A49 support A22?\<close>
-(**An implicit premise is also needed.*)
+(**The same implicit premise as before is needed.*)
 lemma "supports1 A49_C A22_P1" nitpick oops (**countermodel found*)
-theorem assumes "[\<turnstile> \<^bold>\<forall>I. CEAction(I) \<^bold>\<rightarrow> WrongAction(I)] \<longrightarrow> [\<turnstile> CEisWrong]"
+theorem assumes "[\<turnstile> \<^bold>\<forall>I. CEAction(I) \<^bold>\<rightarrow> WrongAction(I)] \<longrightarrow> [\<turnstile> CEisWrong]" (*implicit*)
   shows "supports1 A49_C A22_P1" using A22_P1_def A49_C_def assms(1) by blast
 
 subsubsection\<open>Does A50 attack both A48 and A49?\<close>
@@ -172,7 +172,7 @@ theorem assumes "[\<turnstile> \<^bold>\<not>WrongAction(Mitigation)]" (** impli
 
 subsubsection\<open>Does A51 attack A49?\<close>
 (**The same implicit premise as before is needed.*)
-lemma "attacks2 A51_C A49_P1 A49_P2" nitpick oops (** countermodel found*)
+lemma "attacks1 A51_C A49_P2" nitpick oops (** countermodel found*)
 
 theorem assumes "[\<turnstile> \<^bold>\<not>WrongAction(Mitigation)]" (**implicit premise *)
   shows "attacks1 A51_C A49_P2" using A49_P2_def A51_C_def assms(1) by blast
